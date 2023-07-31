@@ -6,7 +6,6 @@ interface SectionProps {
   children: ReactNode;
   status: status;
 }
-
 const Note: React.FC<SectionProps> = ({ title, status, children }) => {
   return (
     <section className=" border border-red-500 mt-5 rounded-lg  shadow-md px-2">
