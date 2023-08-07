@@ -2,7 +2,7 @@
 import Button from "./component/Button";
 import InputText from "./component/InputText";
 import Label from "./component/Label";
-import Latihan from "./component/latihan";
+
 import Note from "./component/Note";
 
 const Home = () => {
