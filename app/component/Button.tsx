@@ -17,12 +17,12 @@ const Button: React.FC<
     <button
       {...props}
       disabled={isDisabled}
-      className={clsx(` h-8 rounded border w-24 text-white capitalize`, {
+      className={clsx(` h-8 rounded border w-24  capitalize`, {
         "bg-blue-500 text-white": colorSchema === "blue" && variant === "solid",
         "border-blue-500 text-blue-500":
           colorSchema === "blue" && variant === "outline",
         "bg-red-500 text-white": colorSchema === "red" && variant === "solid",
-        "border-red-500 text-red-500":
+        "border-red-500 text-red-500 ":
           colorSchema === "red" && variant === "outline",
         "bg-green-500 text-white":
           colorSchema === "green" && variant === "solid",
