@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import { useState } from "react";
 import Button from "./component/Button";
 import InputText from "./component/InputText";
 import Label from "./component/Label";
@@ -6,79 +7,80 @@ import Label from "./component/Label";
 import Note from "./component/Note";
 
 const Home = () => {
+  let [message, setMessage] = useState("hello");
+  let [count, setCount] = useState(0);
+  let [isLogin, setIsLogin] = useState(false);
   return (
     <main className="space-y-5">
-      <h1>Hello World</h1>
+      <h1 className="text-red-500 font-bold text-2xl">
+        {isLogin ? "Sudah login" : "belum login"}
+      </h1>
+      <Button
+        title="logout"
+        colorSchema="red"
+        variant="solid"
+        onClick={() => {
+          setIsLogin(false);
+        }}
+      />
+      <Button
+        title="login"
+        colorSchema="blue"
+        variant="solid"
+        onClick={() => {
+          setIsLogin(true);
+        }}
+      />
 
-      <section>
-        <Label title="username" htmlFor="username" isRequired />
-        <InputText
-          id="username"
-          name="username"
-          value={"ihsanabuhanifah"}
-          placeholder="username"
-          type="text"
-          messageError="Username not empty"
-        />
-      </section>
-      <section>
-        <Label title="password" htmlFor="password" isRequired />
-        <InputText
-          id="password"
-          name="password"
-          value={"12345678"}
-          placeholder="******"
-          type="passoword"
-        />
-      </section>
+      <Button
+        title={isLogin ? "sign out" : "sign in"}
+        colorSchema={isLogin ? "red" : "blue"}
+        variant="solid"
+        onClick={() => {
+          setIsLogin(!isLogin);
+        }}
+      />
 
-      <section>
-        <Label title="name" htmlFor="name" />
-        <InputText
-          id="name"
-          name="name"
-          value={"ihsan"}
-          onChange={() => {
-            console.log("ok");
-          }}
-        />
-      </section>
+      <h1 className="text-red-500 font-bold text-2xl">{count}</h1>
+      <Button
+        title="tambah"
+        colorSchema="red"
+        variant="solid"
+        onClick={() => {
+          setCount((prevCount) => {
+            console.log("state saat ini", prevCount);
+            return prevCount + 1;
+          });
+        }}
+      />
+      <Button
+        isDisabled={count === 0 ? true : false}
+        // isDisabled={count === 0}
+        title="kurang"
+        colorSchema="blue"
+        variant="solid"
+        onClick={() => {
+          setCount((prevCount) => prevCount - 1);
+        }}
+      />
 
-      <section className="space-x-5">
-        <Button
-          title="simpan"
-          isDisabled={false}
-          variant="solid"
-          colorSchema="blue"
-        />
-         <Button
-          title="simpan"
-          isDisabled={true}
-          variant="solid"
-          colorSchema="blue"
-        />
-        <Button
-          title="Update"
-          isDisabled={false}
-          variant="outline"
-          colorSchema="blue"
-        />
-         <Button
-          title="Update"
-          isDisabled={true}
-          variant="outline"
-          colorSchema="blue"
-        />
-        <Button
-          title="Draft"
-          isDisabled={false}
-          variant="outline"
-          colorSchema="green"
-        />
-
-        <Button title="batal" isDisabled variant="solid" colorSchema="red" />
-        <Button title="batal" isDisabled={false} variant="solid" colorSchema="red" />
-      </section>
+      <h1 className="text-red-500 font-bold text-2xl">{message}</h1>
+      <Button
+        title="ihsan"
+        colorSchema="red"
+        variant="solid"
+        onClick={() => {
+          setMessage("Hello ihsan");
+        }}
+      />
+      <Button
+        title="hilmi"
+        colorSchema="blue"
+        variant="solid"
+        onClick={() => {
+          setMessage("Hello hilmi");
+        }}
+      />
     </main>
   );
 };
