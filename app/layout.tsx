@@ -1,8 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import ReactQuery from '../components/ReactQuery'
 
-const inter = Inter({ subsets: ['latin'] })
+
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={'px-5'}>{children}</body>
+      <body className={'px-5 overflow-hidden'}>
+        <ReactQuery>
+          {children}
+        </ReactQuery>
+      </body>
     </html>
   )
 }

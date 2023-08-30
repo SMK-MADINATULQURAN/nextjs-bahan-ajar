@@ -10,8 +10,8 @@ interface ButtonProps {
   isError?: boolean;
   messageError?: string;
   id: string;
-  value: string | number | null;
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  value: string | number | undefined;
+  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const Select: React.FC<

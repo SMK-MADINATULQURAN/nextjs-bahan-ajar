@@ -8,16 +8,24 @@ interface ButtonProps {
   isDisabled?: boolean;
   variant?: Variant;
   colorSchema: ColorSchema;
+  width?: string;
 }
 
 const Button: React.FC<
   ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>
-> = ({ title, isDisabled, variant = "solid", colorSchema, ...props }) => {
+> = ({
+  title,
+  isDisabled,
+  variant = "solid",
+  colorSchema,
+  width = "full",
+  ...props
+}) => {
   return (
     <button
       {...props}
       disabled={isDisabled}
-      className={clsx(` h-8 rounded border w-24  capitalize`, {
+      className={clsx(`h-12 rounded border w-24  capitalize`, {
         "bg-blue-500 text-white": colorSchema === "blue" && variant === "solid",
         "border-blue-500 text-blue-500":
           colorSchema === "blue" && variant === "outline",
@@ -29,6 +37,8 @@ const Button: React.FC<
         "border-green-500 text-green-500":
           colorSchema === "green" && variant === "outline",
         "opacity-25": isDisabled,
+        "w-24": width === "md",
+        "w-full": width === "full",
       })}
     >
       {title}

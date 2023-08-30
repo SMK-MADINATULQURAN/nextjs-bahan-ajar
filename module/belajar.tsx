@@ -1,4 +1,4 @@
-import Button from "../component/Button";
+import Button from "../components/Button";
 
 interface BelajarProps {
   handleSubmit: (a: number, b: string) => void;

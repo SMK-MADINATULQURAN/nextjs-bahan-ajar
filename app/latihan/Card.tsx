@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import Button from "../component/Button";
+import Button from "../../components/Button";
 
 type Variant = "solid" | "outline";
 type ColorSchema = "blue" | "red" | "green";

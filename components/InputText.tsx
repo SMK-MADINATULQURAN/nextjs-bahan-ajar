@@ -5,7 +5,7 @@ interface InputProps {
   messageError?: string;
   id: string | number;
   name: string;
-  value: string | number;
+  value: string | number | undefined;
 }
 
 const InputText: React.FC<
