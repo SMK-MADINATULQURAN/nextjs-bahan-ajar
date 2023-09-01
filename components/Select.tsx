@@ -10,8 +10,8 @@ interface ButtonProps {
   isError?: boolean;
   messageError?: string;
   id: string;
-  value: string | number | undefined;
-  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
+  value: string | number | null | undefined;
+  
 }
 
 const Select: React.FC<
@@ -37,7 +37,7 @@ const Select: React.FC<
         })}
         {...props}
       >
-        {!!value === false && <option>Pilih</option>}
+       <option>Pilih</option>
         {options?.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}

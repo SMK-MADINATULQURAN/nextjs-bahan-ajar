@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import ClipLoader from "react-spinners/ClipLoader";
 
 type Variant = "solid" | "outline";
 type ColorSchema = "blue" | "red" | "green";
@@ -9,23 +10,27 @@ interface ButtonProps {
   variant?: Variant;
   colorSchema: ColorSchema;
   width?: string;
+  height?: string;
+  isLoading?: boolean;
 }
 
 const Button: React.FC<
   ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>
 > = ({
   title,
-  isDisabled,
+  isDisabled = false,
   variant = "solid",
   colorSchema,
   width = "full",
+  height = "md",
+  isLoading = false,
   ...props
 }) => {
   return (
     <button
       {...props}
       disabled={isDisabled}
-      className={clsx(`h-12 rounded border w-24  capitalize`, {
+      className={clsx(` rounded border w-24  capitalize`, {
         "bg-blue-500 text-white": colorSchema === "blue" && variant === "solid",
         "border-blue-500 text-blue-500":
           colorSchema === "blue" && variant === "outline",
@@ -39,9 +44,20 @@ const Button: React.FC<
         "opacity-25": isDisabled,
         "w-24": width === "md",
         "w-full": width === "full",
+        "h-8": width === "sm",
+        "h-12": width === "md",
       })}
     >
-      {title}
+      {isLoading ? (
+        <ClipLoader
+          color={"#36d7b7"}
+          size={20}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      ) : (
+        title
+      )}
     </button>
   );
 };

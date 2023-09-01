@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={'px-5 overflow-hidden'}>
+      <body className={'px-5 w-screen h-screen overflow-hidden'}>
         <ReactQuery>
           {children}
         </ReactQuery>

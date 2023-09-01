@@ -6,10 +6,13 @@ import useBookModule from "./lib";
 import { Drawer } from "@/components/Drawer";
 import Filter from "./module/Filter";
 import { useClosure } from "@/hook";
+import { useRouter } from "next/navigation";
 
 const Book = () => {
-  const { useBookList } = useBookModule();
+  const { useBookList} = useBookModule();
+  const router = useRouter()
 
+ 
   const {
     data,
     isFetching,
@@ -35,7 +38,7 @@ const Book = () => {
       >
         <Filter params={params} setParams={setParams} />
       </Drawer>
-      <section className="w-screen h-screen p-10 overflow-auto ">
+      <section className=" p-10 overflow-auto ">
         <section className="flex items-center justify-between ">
           <Button
             width="sm"
@@ -43,7 +46,9 @@ const Book = () => {
             colorSchema="blue"
             title="Filter"
           />
-          <Button width="sm" colorSchema="red" title="tambah" />
+          <Button onClick={()=> {
+            router.push('/book/tambah')
+          }} width="sm" colorSchema="red" title="tambah" />
         </section>
 
         <section className="h-full w-full mt-5 ">
