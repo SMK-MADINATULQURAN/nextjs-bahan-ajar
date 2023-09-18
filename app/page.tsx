@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import Button from "./component/Button";
-import InputText from "./component/InputText";
-import Label from "./component/Label";
+import Button from "../component/Button";
+import InputText from "../component/InputText";
+import Label from "../component/Label";
 
 // import Note from "./component/Note";
 
