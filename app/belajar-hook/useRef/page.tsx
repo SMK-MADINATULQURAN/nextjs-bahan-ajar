@@ -25,6 +25,20 @@ const BelajarHook = () => {
       targetAbout.current.appendChild(node);
     }
   };
+
+  const onMouseLeave = () => {
+    console.log("target about", targetAbout.current);
+    const children = targetAbout.current?.getElementsByTagName("div");
+    if (children) {
+      // Convert HTMLCollection menjadi array untuk mempermudah pengulangan.
+      const childrenArray = Array.from(children);
+
+      // Hapus setiap elemen anak (div) dari elemen targetAbout.
+      childrenArray.forEach((child) => {
+        child.remove();
+      });
+    }
+  };
   return (
     <>
       <nav className="h-[50px]">
@@ -45,6 +59,7 @@ const BelajarHook = () => {
           <h1 className="text-white">Content </h1>
         </div>
         <div
+          onMouseLeave={onMouseLeave}
           onMouseEnter={mouseEnter}
           ref={targetAbout}
           className="min-h-screen bg-yellow-500 flex items-center justify-center"
