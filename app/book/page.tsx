@@ -5,14 +5,16 @@ import { Table, Th, Thead, Tr, Tbody, Td } from "../../components/Table";
 import useBookModule from "./lib";
 import { Drawer } from "@/components/Drawer";
 import Filter from "./module/Filter";
-import { useClosure } from "@/hook";
+import { useDisclosure } from "@/hook";
 import { useRouter } from "next/navigation";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
+import { DeleteButton, EditButton } from "@/components/ButtonAction";
+
 
 const Book = () => {
-  const { useBookList} = useBookModule();
-  const router = useRouter()
+  const { useBookList } = useBookModule();
+  const router = useRouter();
 
- 
   const {
     data,
     isFetching,
@@ -25,7 +27,7 @@ const Book = () => {
     handlePage,
   } = useBookList();
 
-  const { isOpen, onOpen, onClose } = useClosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
@@ -46,9 +48,14 @@ const Book = () => {
             colorSchema="blue"
             title="Filter"
           />
-          <Button onClick={()=> {
-            router.push('/book/tambah')
-          }} width="sm" colorSchema="red" title="tambah" />
+          <Button
+            onClick={() => {
+              router.push("/book/tambah");
+            }}
+            width="sm"
+            colorSchema="red"
+            title="tambah"
+          />
         </section>
 
         <section className="h-full w-full mt-5 ">
@@ -73,6 +80,7 @@ const Book = () => {
                 <Th scope="col">Year</Th>
                 <Th scope="col">Created At</Th>
                 <Th scope="col">Updated At</Th>
+                <Th scope="col">Aksi</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -100,6 +108,18 @@ const Book = () => {
                     </Td>
                     <Td>
                       <span>{item.updated_at}</span>
+                    </Td>
+                    <Td>
+                      <DeleteButton
+                        onClick={() => {
+                          console.log("ok");
+                        }}
+                      />
+                      <EditButton
+                        onClick={() => {
+                         router.push(`book/${item.id}/edit`)
+                        }}
+                      />
                     </Td>
                   </Tr>
                 ))}

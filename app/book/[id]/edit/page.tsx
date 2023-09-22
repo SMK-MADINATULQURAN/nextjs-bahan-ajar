@@ -5,8 +5,8 @@ import Label from "@/components/Label";
 import Select from "@/components/Select";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as yup from "yup";
-import { BookCreatePayload } from "../interface";
-import useBookModule from "../lib";
+import { BookUpdatePayload } from "../../interface";
+import useBookModule from "../../lib";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/20/solid";
 
@@ -34,20 +34,28 @@ export const option = [
   },
 ];
 
-const CreateBook = () => {
-  const { useCreateBook } = useBookModule();
-  const { mutate, isLoading } = useCreateBook();
-  const onSubmit = async (values: BookCreatePayload) => {
+const CreateBook = ({ params }: { params: { id: string } }) => {
+  const { useDetailBook, useUpdateBook } = useBookModule();
+
+  const { mutate, isLoading } = useUpdateBook(params.id);
+  const { data, isFetching } = useDetailBook(params.id);
+
+  const onSubmit = async (values: BookUpdatePayload) => {
     mutate(values, {
       onSuccess: () => {
         resetForm();
-        setValues(createBookSchema.getDefault());
+        // setValues();
       },
     });
   };
 
-  const formik = useFormik<BookCreatePayload>({
-    initialValues: createBookSchema.getDefault(),
+  const formik = useFormik<BookUpdatePayload>({
+    initialValues: {
+      title: data?.title || "",
+      year: data?.year,
+      author: data?.author || "",
+      id: data?.id,
+    },
     validationSchema: createBookSchema,
     enableReinitialize: true,
     onSubmit: onSubmit,
@@ -67,9 +75,13 @@ const CreateBook = () => {
     <section className="flex items-center  justify-center w-full h-full">
       <section className="w-1/2">
         <Link href={"/book"}>
-           <span className="flex items-center" > <ArrowLongLeftIcon className="h-5 w-5 mr-2"/>Kembali</span>
+          <span className="flex items-center">
+            {" "}
+            <ArrowLongLeftIcon className="h-5 w-5 mr-2" />
+            Kembali
+          </span>
         </Link>
-        <h2 className="text-xl font-bold text-gray-500">Tambah Buku</h2>
+        <h2 className="text-xl font-bold text-gray-500">Perbaharui Buku</h2>
 
         <FormikProvider value={formik}>
           <Form className="space-y-5" onSubmit={handleSubmit}>
@@ -115,7 +127,7 @@ const CreateBook = () => {
             <section>
               <Button
                 height="md"
-                title="Simpan"
+                title="Perbarui"
                 colorSchema="blue"
                 isLoading={isLoading}
                 isDisabled={isLoading}

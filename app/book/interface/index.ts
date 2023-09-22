@@ -3,7 +3,7 @@ import {
 } from "@/lib/axiosClient";
 
 interface Book {
-  id: number;
+  id: number | undefined;
   title: string;
   author: string;
   year: number | undefined | string;
@@ -24,3 +24,5 @@ export interface BookListFilter extends Partial<Book> {
 
 
 export interface BookCreatePayload extends Pick<Book, "author" | "title" | "year"> {}
+export interface BookUpdatePayload extends Pick<Book, "author" | "title" | "year" | "id"> {}
+export interface BookDetail extends Book{}

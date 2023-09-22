@@ -1,14 +1,18 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosClient } from "@/lib/axiosClient";
 import Swal from "sweetalert2";
 import {
   BookCreatePayload,
+  BookDetail,
   BookListFilter,
   BookListResponse,
+  BookUpdatePayload,
 } from "../interface";
 import { usePagination } from "@/hook/usePagination";
 
 const useBookModule = () => {
+
+  const queryClient = useQueryClient();
   const defaultParams: BookListFilter = {
     title: "",
     author: "",
@@ -80,7 +84,55 @@ const useBookModule = () => {
     return { mutate, isLoading };
   };
 
-  return { useBookList, useCreateBook };
+
+  const getDetailBook = async (
+    id:string
+  ): Promise<BookDetail> => {
+    return axiosClient.get(`/book/detail/${id}`).then((res) => res.data.data);
+  };
+
+  const useDetailBook = (id:string) => {
+    const { data, isLoading, isFetching } = useQuery(
+      ["/book/detail", { id }],
+      () => getDetailBook(id),
+      {
+        select: (response) => response,
+
+       
+      }
+    );
+
+    return { data, isFetching, isLoading };
+
+  }
+
+
+  const useUpdateBook = (id:string) => {
+    const { mutate, isLoading } = useMutation(
+      (payload: BookUpdatePayload) => {
+        return axiosClient.put(`/book/update/${id}`, payload);
+      },
+      {
+        onSuccess: (response) => {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          queryClient.invalidateQueries(["/book/detail"]);
+        },
+
+        onError: (error) => {
+          alert("ok");
+        },
+      }
+    );
+    return { mutate, isLoading };
+  };
+
+  return { useBookList, useCreateBook, useDetailBook, useUpdateBook };
 };
 
 export default useBookModule;

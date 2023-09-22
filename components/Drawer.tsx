@@ -70,6 +70,7 @@ export const Drawer: React.FC<DrawerProps> = ({
             onSubmit();
             onClose();
           }}
+          height="md"
           title="Terapkan"
           colorSchema="blue"
         />
