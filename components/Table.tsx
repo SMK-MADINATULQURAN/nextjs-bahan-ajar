@@ -1,6 +1,6 @@
 "use client";
 import { ReactNode } from "react";
-import { useTransition, animated } from "@react-spring/web";
+
 
 interface TableProps {
   children: ReactNode;
@@ -15,12 +15,7 @@ export const Table: React.FC<TableProps> = ({
   isError = false,
   children,
 }) => {
-  const transitions = useTransition(true, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
-
+ 
 
   return (
     <>

@@ -5,15 +5,20 @@ import { Table, Th, Thead, Tr, Tbody, Td } from "../../components/Table";
 import useBookModule from "./lib";
 import { Drawer } from "@/components/Drawer";
 import Filter from "./module/Filter";
-import { useDisclosure } from "@/hook";
+import { useDisclosure, useConfirmDelete } from "@/hook";
 import { useRouter } from "next/navigation";
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
 import { DeleteButton, EditButton } from "@/components/ButtonAction";
-
+import Swal from "sweetalert2";
 
 const Book = () => {
-  const { useBookList } = useBookModule();
+  const { useBookList, useDeleteBook } = useBookModule();
+  const { mutate, isLoading } = useDeleteBook();
   const router = useRouter();
+  const handleDelete = useConfirmDelete({
+    onSubmit: (id) => {
+      mutate(id);
+    },
+  });
 
   const {
     data,
@@ -110,16 +115,19 @@ const Book = () => {
                       <span>{item.updated_at}</span>
                     </Td>
                     <Td>
-                      <DeleteButton
+                     <span className="flex items-center space-x-2">
+                     <DeleteButton
+                        isLoading={isLoading}
                         onClick={() => {
-                          console.log("ok");
+                          handleDelete(item.id || 0);
                         }}
                       />
                       <EditButton
                         onClick={() => {
-                         router.push(`book/${item.id}/edit`)
+                          router.push(`book/${item.id}/edit`);
                         }}
                       />
+                     </span>
                     </Td>
                   </Tr>
                 ))}

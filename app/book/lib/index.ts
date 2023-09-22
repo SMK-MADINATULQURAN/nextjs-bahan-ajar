@@ -11,7 +11,6 @@ import {
 import { usePagination } from "@/hook/usePagination";
 
 const useBookModule = () => {
-
   const queryClient = useQueryClient();
   const defaultParams: BookListFilter = {
     title: "",
@@ -84,30 +83,23 @@ const useBookModule = () => {
     return { mutate, isLoading };
   };
 
-
-  const getDetailBook = async (
-    id:string
-  ): Promise<BookDetail> => {
+  const getDetailBook = async (id: string): Promise<BookDetail> => {
     return axiosClient.get(`/book/detail/${id}`).then((res) => res.data.data);
   };
 
-  const useDetailBook = (id:string) => {
+  const useDetailBook = (id: string) => {
     const { data, isLoading, isFetching } = useQuery(
       ["/book/detail", { id }],
       () => getDetailBook(id),
       {
         select: (response) => response,
-
-       
       }
     );
 
     return { data, isFetching, isLoading };
+  };
 
-  }
-
-
-  const useUpdateBook = (id:string) => {
+  const useUpdateBook = (id: string) => {
     const { mutate, isLoading } = useMutation(
       (payload: BookUpdatePayload) => {
         return axiosClient.put(`/book/update/${id}`, payload);
@@ -132,7 +124,54 @@ const useBookModule = () => {
     return { mutate, isLoading };
   };
 
-  return { useBookList, useCreateBook, useDetailBook, useUpdateBook };
+  const useDeleteBook = () => {
+    const {mutate, isLoading} = useMutation(
+      (id:number) => {
+        return axiosClient.delete(`/book/delete/${id}`);
+      },
+      {
+        onSuccess: (response) => {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          queryClient.invalidateQueries(["/book/list"]);
+        },
+        onError: (error: any) => {
+          if (error.response.status == 422) {
+            Swal.fire({
+              position: "top",
+              icon: "warning",
+              title: error.response.data.message,
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          } else {
+            Swal.fire({
+              position: "top",
+              icon: "error",
+              title: "Ada Kesalahan",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
+        },
+      }
+    );
+
+    return {mutate, isLoading}
+  };
+
+  return {
+    useBookList,
+    useCreateBook,
+    useDetailBook,
+    useUpdateBook,
+    useDeleteBook,
+  };
 };
 
 export default useBookModule;

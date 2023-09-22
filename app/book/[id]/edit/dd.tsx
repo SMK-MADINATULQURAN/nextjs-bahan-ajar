@@ -23,7 +23,12 @@ const UpdateBook = ({ params }: { params: { id: string } }) => {
   const { data, isFetching } = useDetailBook(params.id);
 
   const onSubmit = async (values: BookUpdatePayload) => {
-    mutate(values);
+    mutate(values, {
+      onSuccess: () => {
+        resetForm();
+        // setValues();
+      },
+    });
   };
 
   const formik = useFormik<BookUpdatePayload>({

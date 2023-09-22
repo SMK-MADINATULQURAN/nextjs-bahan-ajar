@@ -1,11 +1,11 @@
 "use client";
 import { useRef, useState } from "react";
 import Button from "../components/Button";
-import { useClosure } from "@/hook";
+import { useDisclosure } from "@/hook";
 
 
 const Home = () => {
-  const {isOpen, onOpen, onClose} = useClosure()
+  const {isOpen, onOpen, onClose} = useDisclosure()
 
   return (
     <section className="h-screen w-screen space-y-5">
