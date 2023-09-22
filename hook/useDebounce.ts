@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 
-export default function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+const useDebounce = (keyword: string, delay: number) => {
+  let [debouncedValue, setDebouncedValue] = useState("");
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value);
+      setDebouncedValue(keyword);
     }, delay);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [value, delay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword]);
 
   return {debouncedValue}
-}
+};
+
+export default useDebounce;
