@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useClosure = () => {
+const useDislosure = () => {
   let [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onOpen = () => {
@@ -16,4 +16,4 @@ const useClosure = () => {
 };
 
 
-export default useClosure
+export default useDislosure

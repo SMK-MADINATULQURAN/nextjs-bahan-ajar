@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Button from "@/component/Button";
-import useClosure from "@/hook/useClosure";
+import useClosure from "@/hook/useDisclosure";
 
 
 const Home = () => {
