@@ -9,34 +9,16 @@ import { BookUpdatePayload } from "../../interface";
 import useBookModule from "../../lib";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/20/solid";
+import { option } from "../../tambah/page";
 
 const createBookSchema = yup.object().shape({
   title: yup.string().nullable().default("").required("Wajib isi"),
   author: yup.string().nullable().default("").required("Wajib isi"),
   year: yup.number().nullable().default(undefined).required("Wajib pilih"),
 });
-export const option = [
-  {
-    value: 2020,
-    label: "2020",
-  },
-  {
-    value: 2021,
-    label: "2021",
-  },
-  {
-    value: 2022,
-    label: "2022",
-  },
-  {
-    value: 2023,
-    label: "2023",
-  },
-];
 
 const CreateBook = ({ params }: { params: { id: string } }) => {
   const { useDetailBook, useUpdateBook } = useBookModule();
-
   const { mutate, isLoading } = useUpdateBook(params.id);
   const { data, isFetching } = useDetailBook(params.id);
 
@@ -71,6 +53,13 @@ const CreateBook = ({ params }: { params: { id: string } }) => {
     resetForm,
     setValues,
   } = formik;
+
+  if(isFetching) {
+    
+    return (
+        <p>Loading</p>
+    )
+  }
   return (
     <section className="flex items-center  justify-center w-full h-full">
       <section className="w-1/2">
