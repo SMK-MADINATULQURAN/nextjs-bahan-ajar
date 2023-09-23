@@ -45,7 +45,7 @@ const Book = () => {
       >
         <Filter params={params} setParams={setParams} />
       </Drawer>
-      <section className=" p-10 overflow-auto ">
+      <section className=" py-10 overflow-auto ">
         <section className="flex items-center justify-between ">
           <Button
             width="sm"
@@ -53,7 +53,8 @@ const Book = () => {
             colorSchema="blue"
             title="Filter"
           />
-          <Button
+        <div className="space-x-5">
+        <Button
             onClick={() => {
               router.push("/book/tambah");
             }}
@@ -61,6 +62,15 @@ const Book = () => {
             colorSchema="red"
             title="tambah"
           />
+          <Button
+            onClick={() => {
+              router.push("/book/tambah-bulk");
+            }}
+            width="sm"
+            colorSchema="green"
+            title="tambah bulk"
+          />
+        </div>
         </section>
 
         <section className="h-full w-full mt-5 ">

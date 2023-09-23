@@ -1,12 +1,10 @@
-import {
-  BaseResponsePagination,
-} from "@/lib/axiosClient";
+import { BaseResponsePagination } from "@/lib/axiosClient";
 
 interface Book {
   id: number | undefined;
   title: string;
   author: string;
-  year: number | undefined | string;
+  year: number | undefined | string 
   created_at: string;
   updated_at: string;
 }
@@ -18,11 +16,16 @@ export interface BookListResponse extends BaseResponsePagination {
 export interface BookListFilter extends Partial<Book> {
   from_year?: string;
   to_year?: string;
-  page : number ,
-  pageSize : number 
+  page: number;
+  pageSize: number;
 }
 
+export interface BookCreatePayload
+  extends Pick<Book, "author" | "title" | "year"> {}
+export interface BookUpdatePayload
+  extends Pick<Book, "author" | "title" | "year" | "id"> {}
+export interface BookDetail extends Book {}
 
-export interface BookCreatePayload extends Pick<Book, "author" | "title" | "year"> {}
-export interface BookUpdatePayload extends Pick<Book, "author" | "title" | "year" | "id"> {}
-export interface BookDetail extends Book{}
+export interface BookCreateArrayPayload {
+  data: BookCreatePayload[];
+}

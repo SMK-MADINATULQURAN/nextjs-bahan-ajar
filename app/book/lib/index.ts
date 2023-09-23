@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosClient } from "@/lib/axiosClient";
 import Swal from "sweetalert2";
 import {
+  BookCreateArrayPayload,
   BookCreatePayload,
   BookDetail,
   BookListFilter,
@@ -165,12 +166,44 @@ const useBookModule = () => {
     return {mutate, isLoading}
   };
 
+
+  const useCreateBulkBook = () => {
+    const { mutate, isLoading } = useMutation(
+      (payload: BookCreateArrayPayload) => {
+        return axiosClient.post("/book/create/bulk", payload);
+      },
+      {
+        onSuccess: (response) => {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: response.data.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        },
+        onError: (error) => {
+          Swal.fire({
+            position: "top",
+            icon: "error",
+            title: "Ada Kesalahan",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        },
+      }
+    );
+    return { mutate, isLoading };
+  };
+
+
   return {
     useBookList,
     useCreateBook,
     useDetailBook,
     useUpdateBook,
     useDeleteBook,
+    useCreateBulkBook
   };
 };
 

@@ -10,7 +10,7 @@ import useBookModule from "../lib";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/20/solid";
 
-const createBookSchema = yup.object().shape({
+export const createBookSchema = yup.object().shape({
   title: yup.string().nullable().default("").required("Wajib isi"),
   author: yup.string().nullable().default("").required("Wajib isi"),
   year: yup.number().nullable().default(undefined).required("Wajib pilih"),
@@ -109,7 +109,7 @@ const CreateBook = () => {
                 onBlur={handleBlur}
                 options={option}
                 isError={!!errors.year}
-                messageError={errors.year}
+                // messageError={errors.year}
               />
             </section>
             <section>

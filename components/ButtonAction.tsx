@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
 import Spinner from "./Spinner";
+import { PlusIcon } from "@heroicons/react/24/solid";
 interface ButtonActionProps {
   onClick: () => void;
   isLoading?: boolean;
@@ -17,7 +18,7 @@ export const DeleteButton: React.FC<
       {...props}
       className="text-red-500  h-6 w-6 "
     >
-      {!isLoading ? <Spinner /> : <TrashIcon />}
+      {isLoading ? <Spinner /> : <TrashIcon />}
     </button>
   );
 };
@@ -34,6 +35,23 @@ export const EditButton: React.FC<
       className="text-blue-500 h-6 w-6"
     >
       {isLoading ? <Spinner /> : <PencilSquareIcon />}
+    </button>
+  );
+};
+
+
+export const AddButton: React.FC<
+  ButtonActionProps & React.ButtonHTMLAttributes<HTMLButtonElement>
+> = ({ onClick, isLoading = false, ...props }) => {
+  return (
+    <button
+      disabled={isLoading}
+      type="button"
+      onClick={onClick}
+      {...props}
+      className="text-blue-500 h-6 w-6"
+    >
+      {isLoading ? <Spinner /> : <PlusIcon />}
     </button>
   );
 };
