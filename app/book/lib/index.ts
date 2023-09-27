@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosClient } from "@/lib/axiosClient";
-import Swal from "sweetalert2";
+import { useToast } from "@/hook";
 import {
   BookCreateArrayPayload,
   BookCreatePayload,
+  BookDeleteArrayPayload,
   BookDetail,
   BookListFilter,
   BookListResponse,
@@ -13,6 +14,7 @@ import { usePagination } from "@/hook/usePagination";
 
 const useBookModule = () => {
   const queryClient = useQueryClient();
+  const { toastError, toastSuccess, toastWarning } = useToast();
   const defaultParams: BookListFilter = {
     title: "",
     author: "",
@@ -68,16 +70,10 @@ const useBookModule = () => {
       },
       {
         onSuccess: (response) => {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 15000,
-          });
+          toastSuccess(response.data.message);
         },
         onError: (error) => {
-          alert("ok");
+          toastError();
         },
       }
     );
@@ -107,18 +103,13 @@ const useBookModule = () => {
       },
       {
         onSuccess: (response) => {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 1000,
-          });
+          toastSuccess(response.data.message);
           queryClient.invalidateQueries(["/book/detail"]);
         },
 
         onError: (error) => {
-          alert("ok");
+          
+          toastError();
         },
       }
     );
@@ -126,46 +117,27 @@ const useBookModule = () => {
   };
 
   const useDeleteBook = () => {
-    const {mutate, isLoading} = useMutation(
-      (id:number) => {
+    const { mutate, isLoading } = useMutation(
+      (id: number) => {
         return axiosClient.delete(`/book/delete/${id}`);
       },
       {
         onSuccess: (response) => {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 1000,
-          });
+          toastSuccess(response.data.message);
           queryClient.invalidateQueries(["/book/list"]);
         },
         onError: (error: any) => {
           if (error.response.status == 422) {
-            Swal.fire({
-              position: "top",
-              icon: "warning",
-              title: error.response.data.message,
-              showConfirmButton: false,
-              timer: 1000,
-            });
+            toastWarning(error.response.data.message);
           } else {
-            Swal.fire({
-              position: "top",
-              icon: "error",
-              title: "Ada Kesalahan",
-              showConfirmButton: false,
-              timer: 1000,
-            });
+            toastError();
           }
         },
       }
     );
 
-    return {mutate, isLoading}
+    return { mutate, isLoading };
   };
-
 
   const useCreateBulkBook = () => {
     const { mutate, isLoading } = useMutation(
@@ -174,28 +146,34 @@ const useBookModule = () => {
       },
       {
         onSuccess: (response) => {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: response.data.message,
-            showConfirmButton: false,
-            timer: 1000,
-          });
+          toastSuccess(response.data.message);
         },
         onError: (error) => {
-          Swal.fire({
-            position: "top",
-            icon: "error",
-            title: "Ada Kesalahan",
-            showConfirmButton: false,
-            timer: 1000,
-          });
+          toastError();
         },
       }
     );
     return { mutate, isLoading };
   };
 
+  const useDeleteBulkBook = () => {
+    const { mutate, isLoading } = useMutation(
+      (payload: BookDeleteArrayPayload) => {
+        return axiosClient.post("/book/delete/bulk", payload);
+      },
+      {
+        onSuccess: (response) => {
+          toastSuccess(response.data.message);
+
+          queryClient.invalidateQueries(["/book/list"]);
+        },
+        onError: (error) => {
+          toastError();
+        },
+      }
+    );
+    return { mutate, isLoading };
+  };
 
   return {
     useBookList,
@@ -203,7 +181,8 @@ const useBookModule = () => {
     useDetailBook,
     useUpdateBook,
     useDeleteBook,
-    useCreateBulkBook
+    useCreateBulkBook,
+    useDeleteBulkBook,
   };
 };
 

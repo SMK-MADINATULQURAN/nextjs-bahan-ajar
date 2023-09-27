@@ -5,6 +5,18 @@ export const axiosClient: AxiosInstance = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+
+export const axiosClientRefresh: AxiosInstance = axios.create({
+  baseURL: "http://localhost:5002",
+  headers: { "Content-Type": "application/json" },
+});
+
+export interface BaseResponseSuccess {
+  status: string;
+  message: string;
+  data: any[] | any;
+}
+
 export interface BaseResponsePagination {
   status: string;
   message: string;

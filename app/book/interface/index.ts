@@ -1,7 +1,7 @@
 import { BaseResponsePagination } from "@/lib/axiosClient";
 
 interface Book {
-  id: number | undefined;
+  id: number ;
   title: string;
   author: string;
   year: number | undefined | string 
@@ -28,4 +28,8 @@ export interface BookDetail extends Book {}
 
 export interface BookCreateArrayPayload {
   data: BookCreatePayload[];
+}
+
+export interface BookDeleteArrayPayload {
+  data : number[]
 }

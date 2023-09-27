@@ -31,7 +31,7 @@ const UpdateBook = ({ params }: { params: { id: string } }) => {
       title: data?.title || "",
       year: data?.year,
       author: data?.author || "",
-      id: data?.id,
+      id: data?.id || 0,
     },
     validationSchema: createBookSchema,
     enableReinitialize: true,
