@@ -52,7 +52,7 @@ export const useRefreshToken = () => {
 
       const res = await axiosClientRefresh.get("/auth/refresh-token");
 
-      console.log('res', res.data)
+      console.log("res", res.data);
       await update({
         ...session,
         user: {
