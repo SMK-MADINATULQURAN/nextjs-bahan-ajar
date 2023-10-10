@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BookListResponse } from "./interface";
 import { axiosClient } from "@/lib/axiosClient";
 import { useEffect } from "react";
+import { dateUtil } from "@/utils";
 const Book = () => {
   const getBookList = async (): Promise<BookListResponse> => {
     return axiosClient.get("/book/list").then((res) => {
@@ -23,9 +24,11 @@ const Book = () => {
 
   console.log("data", data);
   console.log("isFetching", isFetching);
+  
   return (
     <>
       <section className="container px-4 mx-auto">
+        {isFetching ? 'loading' : ''}
         <Table>
           <Thead>
             <Tr>
@@ -36,7 +39,7 @@ const Book = () => {
                     className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
                   />
                   <button className="flex items-center gap-x-2">
-                    <span>Invoice</span>
+                    <span>No.</span>
                     <svg
                       className="h-3"
                       viewBox="0 0 10 11"
@@ -65,36 +68,42 @@ const Book = () => {
                   </button>
                 </div>
               </Th>
-              <Th scope="col">Date</Th>
-              <Th scope="col">Status</Th>
-              <Th scope="col">Customer</Th>
-              <Th scope="col">Purchase</Th>
+              <Th scope="col">Judul</Th>
+              <Th scope="col">Penulis</Th>
+              <Th scope="col">Tahun</Th>
+              <Th scope="col">Tanggal Dibuat</Th>
+              <Th scope="col">Tanggal Diperbaharui</Th>
               <Th scope="col">
                 <span className="sr-only">Actions</span>
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>
-                <span>ok</span>
-              </Td>
-              <Td>
-                <span>ok</span>
-              </Td>
-              <Td>
-                <span>ok</span>
-              </Td>
-              <Td>
-                <span>ok</span>
-              </Td>
-              <Td>
-                <span>ok</span>
-              </Td>
-              <Td>
-                <span>ok</span>
-              </Td>
-            </Tr>
+
+            {isFetching && <tr><td>Loading</td></tr>}
+            { !isFetching && data && data?.data?.map((item, index) => (
+              <Tr key={index}>
+                <Td>
+                  <span>{index + 1}</span>
+                </Td>
+                <Td>
+                  <span>{item.title}</span>
+                </Td>
+                <Td>
+                  <span>{item.author}</span>
+                </Td>
+                <Td>
+                  <span>{item.year}</span>
+                </Td>
+                <Td>
+                  <span>{dateUtil.formatDateTime(item.created_at)}</span>
+                  {/* {item.created_at} */}
+                </Td>
+                <Td>
+                <span>{dateUtil.formatDateIndLong(item.updated_at)}</span>
+                </Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       </section>
