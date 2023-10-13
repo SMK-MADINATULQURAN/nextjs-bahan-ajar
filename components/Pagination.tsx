@@ -4,10 +4,10 @@ import clsx from "clsx";
 
 interface PaginationProps {
   handlePageSize: (e: ChangeEvent<any>) => void;
-  handlePage: (page : number) => void;
+  handlePage: (page: number) => void;
 
-  page: number | string;
-  pageSize: number | string;
+  page: number | string ;
+  pageSize: number | string ;
 
   pagination:
     | {
@@ -97,14 +97,15 @@ export const Pagination: React.FC<PaginationProps> = ({
           <option value={50}>50</option>
           <option value={100}>100</option>
         </select>
+        <p> dari {pagination?.total} data</p>
       </div>
 
       <div className="items-center hidden md:flex gap-x-3">
         {pages.pages.map((pageItem, index) => (
           <button
             key={index}
-            onClick={()=> {
-              handlePage(pageItem)
+            onClick={() => {
+              handlePage(pageItem);
             }}
             className={clsx(
               `px-4 py-2 rounded-full text-sm `,

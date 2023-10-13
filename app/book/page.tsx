@@ -1,34 +1,19 @@
 "use client";
-import { Pagination } from "../../components/Pagination";
 import { Table, Th, Thead, Tr, Tbody, Td } from "../../components/Tabel";
-import { useQuery } from "@tanstack/react-query";
-import { BookListResponse } from "./interface";
-import { axiosClient } from "@/lib/axiosClient";
-import { useEffect } from "react";
 import { dateUtil } from "@/utils";
+import useBookModule from "./lib";
+import { Pagination } from "@/components/Pagination";
+import { useState } from "react";
 const Book = () => {
-  const getBookList = async (): Promise<BookListResponse> => {
-    return axiosClient.get("/book/list").then((res) => {
-      console.log("res", res);
-      return res.data;
-    });
-  };
+  const { useBookList } = useBookModule();
+  const { data, isFetching, params, handlePage } = useBookList();
+  console.log('data response', data)
+  console.log('params', params)
 
-  const { data, isFetching, isLoading } = useQuery(
-    ["/book/list"],
-    () => getBookList(),
-    {
-      select: (response) => response,
-    }
-  );
-
-  console.log("data", data);
-  console.log("isFetching", isFetching);
-  
   return (
     <>
       <section className="container px-4 mx-auto">
-        {isFetching ? 'loading' : ''}
+        {isFetching ? "loading" : ""}
         <Table>
           <Thead>
             <Tr>
@@ -79,33 +64,45 @@ const Book = () => {
             </Tr>
           </Thead>
           <Tbody>
-
-            {isFetching && <tr><td>Loading</td></tr>}
-            { !isFetching && data && data?.data?.map((item, index) => (
-              <Tr key={index}>
-                <Td>
-                  <span>{index + 1}</span>
-                </Td>
-                <Td>
-                  <span>{item.title}</span>
-                </Td>
-                <Td>
-                  <span>{item.author}</span>
-                </Td>
-                <Td>
-                  <span>{item.year}</span>
-                </Td>
-                <Td>
-                  <span>{dateUtil.formatDateTime(item.created_at)}</span>
-                  {/* {item.created_at} */}
-                </Td>
-                <Td>
-                <span>{dateUtil.formatDateIndLong(item.updated_at)}</span>
-                </Td>
-              </Tr>
-            ))}
+            {isFetching && (
+              <tr>
+                <td>Loading</td>
+              </tr>
+            )}
+            {!isFetching &&
+              data &&
+              data?.data?.map((item: any, index: any) => (
+                <Tr key={index}>
+                  <Td>
+                    <span>{index + 1}</span>
+                  </Td>
+                  <Td>
+                    <span>{item.title}</span>
+                  </Td>
+                  <Td>
+                    <span>{item.author}</span>
+                  </Td>
+                  <Td>
+                    <span>{item.year}</span>
+                  </Td>
+                  <Td>
+                    <span>{dateUtil.formatDateTime(item.created_at)}</span>
+                    {/* {item.created_at} */}
+                  </Td>
+                  <Td>
+                    <span>{dateUtil.formatDateIndLong(item.updated_at)}</span>
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
         </Table>
+        <Pagination
+          page={params.page}
+          pageSize={params.pageSize}
+          handlePageSize={() => console.log("tekan page size")}
+          handlePage={handlePage}
+          pagination={data?.pagination}
+        />
       </section>
     </>
   );
