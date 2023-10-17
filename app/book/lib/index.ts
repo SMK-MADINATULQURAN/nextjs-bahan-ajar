@@ -1,7 +1,7 @@
 import { axiosClient } from "@/lib/axiosClient";
 import { BookListFilter, BookListResponse } from "../interface";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const useBookModule = () => {
   const defaultParams = {
@@ -26,6 +26,11 @@ const useBookModule = () => {
     let [filterParams, setFilterParams] =
       useState<BookListFilter>(defaultParams);
 
+    const handlePageSize = (e: ChangeEvent<any>) => {
+      console.log('event', e.target.value)
+      setParams((params) => ({ ...params, pageSize: e.target.value }));
+      setFilterParams((params) => ({ ...params, pageSize: e.target.value }));
+    };
     const handlePage = (page: number) => {
       setParams((params) => ({ ...params, page: page }));
       setFilterParams((params) => ({ ...params, page: page }));
@@ -39,7 +44,7 @@ const useBookModule = () => {
       }
     );
 
-    return { data, isFetching, isLoading, params, handlePage };
+    return { data, isFetching, isLoading, params, handlePage, handlePageSize };
   };
 
   return { useBookList };

@@ -6,7 +6,7 @@ import { Pagination } from "@/components/Pagination";
 import { useState } from "react";
 const Book = () => {
   const { useBookList } = useBookModule();
-  const { data, isFetching, params, handlePage } = useBookList();
+  const { data, isFetching, params, handlePage, handlePageSize } = useBookList();
   console.log('data response', data)
   console.log('params', params)
 
@@ -99,7 +99,7 @@ const Book = () => {
         <Pagination
           page={params.page}
           pageSize={params.pageSize}
-          handlePageSize={() => console.log("tekan page size")}
+          handlePageSize={handlePageSize}
           handlePage={handlePage}
           pagination={data?.pagination}
         />
