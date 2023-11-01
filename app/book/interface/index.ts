@@ -20,3 +20,6 @@ export interface BookListFilter extends Partial<Book> {
   page: number;
   pageSize: number;
 }
+
+export interface BookCreatePayload extends Pick<Book, "author" | "title" | "year"> {}
+

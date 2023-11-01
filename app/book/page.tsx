@@ -3,17 +3,59 @@ import { Table, Th, Thead, Tr, Tbody, Td } from "../../components/Tabel";
 import { dateUtil } from "@/utils";
 import useBookModule from "./lib";
 import { Pagination } from "@/components/Pagination";
+import { Drawer } from "@/components/Drawer";
+import useDislosure from "@/hook/useDisclosure";
 import { useState } from "react";
+import Button from "@/components/Button";
+import Filter from "./module/filter";
+import { useRouter } from "next/navigation";
+
 const Book = () => {
   const { useBookList } = useBookModule();
-  const { data, isFetching, params, handlePage, handlePageSize } = useBookList();
-  console.log('data response', data)
-  console.log('params', params)
+  const router = useRouter();
+  const { onOpen, isOpen, onClose } = useDislosure();
+  const {
+    data,
+    isFetching,
+    filterParams,
+    params,
+    handlePage,
+    handlePageSize,
+    setParams,
+    handleFilter,
+    handleClear,
+  } = useBookList();
+  console.log("data response", data);
+  console.log("params", params);
 
   return (
     <>
+      <Drawer
+        isOpen={isOpen}
+        onClose={onClose}
+        onClear={handleClear}
+        onSubmit={handleFilter}
+        title="Filter Buku"
+      >
+        <Filter params={params} setParams={setParams} />
+      </Drawer>
+
+      {JSON.stringify(params)}
+      <p>Pemisah</p>
+      {JSON.stringify(filterParams)}
       <section className="container px-4 mx-auto">
         {isFetching ? "loading" : ""}
+        <div className="grid grid-cols-6 gap-5">
+          <Button title="Filter" onClick={onOpen} colorSchema="blue" />
+          <Button
+            onClick={() => {
+              router.push("/book/tambah");
+            }}
+            width="sm"
+            colorSchema="red"
+            title="tambah"
+          />
+        </div>
         <Table>
           <Thead>
             <Tr>

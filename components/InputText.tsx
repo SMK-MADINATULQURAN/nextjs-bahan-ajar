@@ -11,7 +11,7 @@ interface InputProps {
 const InputText: React.FC<
   InputProps & React.InputHTMLAttributes<HTMLInputElement>
 > = ({
-  messageError = "wajib di isi",
+  messageError = "wajib donk",
   isError = false,
   id,
   name,

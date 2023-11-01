@@ -2,11 +2,16 @@ import { axiosClient } from "@/lib/axiosClient";
 import { BookListFilter, BookListResponse } from "../interface";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
+import { usePagination } from "@/hook/usePagination";
 
 const useBookModule = () => {
   const defaultParams = {
     page: 1,
     pageSize: 10,
+    title: "",
+    author: "",
+    from_year: "",
+    to_year: "",
   };
   const getBookList = async (
     params: BookListFilter
@@ -22,19 +27,15 @@ const useBookModule = () => {
   };
 
   const useBookList = () => {
-    let [params, setParams] = useState<BookListFilter>(defaultParams);
-    let [filterParams, setFilterParams] =
-      useState<BookListFilter>(defaultParams);
-
-    const handlePageSize = (e: ChangeEvent<any>) => {
-      console.log('event', e.target.value)
-      setParams((params) => ({ ...params, pageSize: e.target.value }));
-      setFilterParams((params) => ({ ...params, pageSize: e.target.value }));
-    };
-    const handlePage = (page: number) => {
-      setParams((params) => ({ ...params, page: page }));
-      setFilterParams((params) => ({ ...params, page: page }));
-    };
+    const {
+      params,
+      setParams,
+      handleFilter,
+      handleClear,
+      handlePageSize,
+      handlePage,
+      filterParams,
+    } = usePagination(defaultParams);
 
     const { data, isFetching, isLoading } = useQuery(
       ["/book/list", [filterParams]],
@@ -44,7 +45,18 @@ const useBookModule = () => {
       }
     );
 
-    return { data, isFetching, isLoading, params, handlePage, handlePageSize };
+    return {
+      data,
+      isFetching,
+      filterParams,
+      isLoading,
+      params,
+      setParams,
+      handlePage,
+      handlePageSize,
+      handleFilter,
+      handleClear,
+    };
   };
 
   return { useBookList };

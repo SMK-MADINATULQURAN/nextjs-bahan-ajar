@@ -23,9 +23,9 @@ export const Drawer: React.FC<DrawerProps> = ({
   onClose,
 }) => {
   const springs = useSpring({
-    from: { opacity: 0, },
+    from: { opacity: 0 },
     to: { opacity: 1 },
-  })
+  });
 
   return (
     <animated.div
@@ -33,10 +33,11 @@ export const Drawer: React.FC<DrawerProps> = ({
         height: "100vh",
 
         right: 0,
+        top: 0,
         position: "absolute",
         zIndex: 50,
         ...(!isOpen && { display: "none" }),
-        ...springs
+        ...springs,
       }}
       className={
         "shadow-sm  md:w-[50%] lg:w-[30%] xl:w-[20%] w-full md bg-white border border-gray-100 px-5"
@@ -54,7 +55,6 @@ export const Drawer: React.FC<DrawerProps> = ({
           </button>
           <button
             onClick={() => {
-
               onClose();
             }}
           >
