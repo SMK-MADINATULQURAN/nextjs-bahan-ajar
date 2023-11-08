@@ -25,6 +25,7 @@ export interface ProfileResponse extends BaseResponseSuccess {
   data: User;
 }
 
-export interface ProfileUpdatePayload  extends Pick<User,  "avatar" | "nama"> {
+export interface ProfileUpdatePayload  extends Pick<User,  "avatar" | "nama" | "id"> {
   file? : File
+  
 }

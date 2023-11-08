@@ -13,11 +13,14 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useAxiosAuth from "@/hook/useAxiosAuth";
 import { useSession } from "next-auth/react";
+import useUploadFile from "@/hook/useUploadFile";
 
 const useAuthModule = () => {
   const { toastError, toastSuccess, toastWarning } = useToast();
   const axiosAuthClient = useAxiosAuth();
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
+  const { uploadSingle } = useUploadFile();
 
   const router = useRouter();
   const register = async (
@@ -98,7 +101,18 @@ const useAuthModule = () => {
   const updateProfile = async (
     payload: ProfileUpdatePayload
   ): Promise<ProfileResponse> => {
-    return axiosAuthClient.get("/auth/profile").then((res) => res.data);
+    if (payload.file !== undefined) {
+      const res = await uploadSingle(payload.file);
+
+      payload = {
+        ...payload,
+        avatar: res.data.file_url,
+      };
+    }
+
+    return axiosAuthClient
+      .put("/profile/update", payload)
+      .then((res) => res.data);
   };
 
   const useUpdateProfile = () => {
@@ -107,13 +121,18 @@ const useAuthModule = () => {
       {
         onSuccess: async (response) => {
           toastSuccess(response.message);
+          queryClient.invalidateQueries(["/auth/profile"]);
         },
         onError: (error: any) => {
           if (error.response.status == 422) {
-            toastWarning(error.response.data.message);
-          } else {
-            toastError();
+            return toastWarning(error.response.data.message);
           }
+
+          if (error.response.status == 400) {
+            return toastWarning(error.response.data.message.toString());
+          }
+
+          toastError();
         },
       }
     );

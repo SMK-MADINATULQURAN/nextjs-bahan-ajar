@@ -33,13 +33,14 @@ const UpdateProfile = () => {
       nama: data?.data?.nama || "",
       avatar: data?.data?.avatar || "",
       file: undefined,
+      id : data?.data?.id || 0
     },
     validationSchema: registerSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
 
         console.log('va', values)
-      //   mutate(payload);
+        mutate(values);
     },
   });
 

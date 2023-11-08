@@ -5,7 +5,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['drive.google.com'], // Tambahkan domain drive.google.com ke sini
+    domains: ['drive.google.com', 'localhost'], // Tambahkan domain drive.google.com ke sini
   },
 };
 
