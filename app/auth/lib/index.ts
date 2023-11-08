@@ -4,6 +4,7 @@ import {
   LoginPayload,
   LoginResponse,
   ProfileResponse,
+  ProfileUpdatePayload,
   RegisterPayload,
   RegisterResponse,
 } from "../interface";
@@ -15,8 +16,8 @@ import { useSession } from "next-auth/react";
 
 const useAuthModule = () => {
   const { toastError, toastSuccess, toastWarning } = useToast();
-  const axiosAuthClient = useAxiosAuth()
-  const {data:session} = useSession()
+  const axiosAuthClient = useAxiosAuth();
+  const { data: session } = useSession();
 
   const router = useRouter();
   const register = async (
@@ -87,14 +88,39 @@ const useAuthModule = () => {
         staleTime: 1000 * 60 * 60,
         refetchInterval: 1000 * 60 * 60,
         refetchOnWindowFocus: false,
-        enabled : session?.user?.id !== undefined
+        enabled: session?.user?.id !== undefined,
       }
     );
 
     return { data, isFetching, isLoading };
   };
 
-  return { useRegister, useLogin, useProfile };
+  const updateProfile = async (
+    payload: ProfileUpdatePayload
+  ): Promise<ProfileResponse> => {
+    return axiosAuthClient.get("/auth/profile").then((res) => res.data);
+  };
+
+  const useUpdateProfile = () => {
+    const { mutate, isLoading } = useMutation(
+      (payload: ProfileUpdatePayload) => updateProfile(payload),
+      {
+        onSuccess: async (response) => {
+          toastSuccess(response.message);
+        },
+        onError: (error: any) => {
+          if (error.response.status == 422) {
+            toastWarning(error.response.data.message);
+          } else {
+            toastError();
+          }
+        },
+      }
+    );
+
+    return { mutate, isLoading };
+  };
+  return { useRegister, useLogin, useProfile, useUpdateProfile };
 };
 
 export default useAuthModule;

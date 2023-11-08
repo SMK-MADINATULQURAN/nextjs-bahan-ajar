@@ -1,5 +1,6 @@
 import { BaseResponseSuccess } from "@/lib/axiosClient";
 
+
 interface User {
   id?: number;
   nama: string;
@@ -22,4 +23,8 @@ export interface LoginResponse extends BaseResponseSuccess {
 
 export interface ProfileResponse extends BaseResponseSuccess {
   data: User;
+}
+
+export interface ProfileUpdatePayload  extends Pick<User,  "avatar" | "nama"> {
+  file? : File
 }
