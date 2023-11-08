@@ -10,12 +10,14 @@ import useBookModule from "../lib";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/20/solid";
 
+
+
 const createBookSchema = yup.object().shape({
   title: yup.string().nullable().default("").required("Wajib isi"),
   author: yup.string().nullable().default("").required("Wajib isi"),
   year: yup.number().nullable().default(undefined).required("Wajib pilih"),
 });
-const option = [
+export const option = [
   {
     value: 2020,
     label: "2020",
@@ -35,6 +37,8 @@ const option = [
 ];
 
 const CreateBook = () => {
+  const { useCreateBook } = useBookModule();
+  const { mutate, isLoading } = useCreateBook();
   const formik = useFormik<BookCreatePayload>({
     // initialValues: {
     //   title: "",
@@ -45,8 +49,13 @@ const CreateBook = () => {
     initialValues: createBookSchema.getDefault(),
     validationSchema: createBookSchema,
     enableReinitialize: true,
-    onSubmit: () => {
-      console.log("submit berjalan");
+    onSubmit: (values) => {
+      mutate(values, {
+        onSuccess: () => {
+          resetForm();
+        },
+      });
+      console.log("submit berjalan", values);
     },
   });
 
@@ -79,7 +88,16 @@ const CreateBook = () => {
             <section>
               <Label htmlFor="title" title="Title" />
               <InputText
-                onChange={handleChange}
+                onBlur={handleBlur}
+                onChange={(e) => {
+                  setFieldValue("title", e.target.value);
+                  if (e.target.value === "ihsan") {
+                    setFieldValue("year", 2023);
+                  }
+                  if (e.target.value === "hilmi") {
+                    setFieldValue("year", 2022);
+                  }
+                }}
                 value={values.title}
                 placeholder="Judul Buku"
                 id="title"
@@ -91,6 +109,7 @@ const CreateBook = () => {
             <section>
               <Label htmlFor="author" title="Auhtor" />
               <InputText
+                onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.author}
                 placeholder="Penulis Buku"
@@ -113,7 +132,21 @@ const CreateBook = () => {
               />
             </section>
             <section>
-              <Button height="md" title="Simpan" colorSchema="blue" />
+              <Button
+                type="submit"
+                height="md"
+                title="Simpan"
+                colorSchema="blue"
+              />
+              <Button
+                type="button"
+                onClick={() => {
+                  resetForm();
+                }}
+                height="md"
+                title="Cancel"
+                colorSchema="red"
+              />
             </section>
           </Form>
         </FormikProvider>

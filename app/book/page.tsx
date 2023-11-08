@@ -9,6 +9,7 @@ import { useState } from "react";
 import Button from "@/components/Button";
 import Filter from "./module/filter";
 import { useRouter } from "next/navigation";
+import { DeleteButton, EditButton } from "@/components/ButtonAction";
 
 const Book = () => {
   const { useBookList } = useBookModule();
@@ -103,6 +104,7 @@ const Book = () => {
               <Th scope="col">
                 <span className="sr-only">Actions</span>
               </Th>
+              <Th>Aksi</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -134,6 +136,18 @@ const Book = () => {
                   <Td>
                     <span>{dateUtil.formatDateIndLong(item.updated_at)}</span>
                   </Td>
+                  <Td>
+                      <DeleteButton
+                        onClick={() => {
+                          console.log("ok");
+                        }}
+                      />
+                      <EditButton
+                        onClick={() => {
+                         router.push(`book/${item.id}/edit`)
+                        }}
+                      />
+                    </Td>
                 </Tr>
               ))}
           </Tbody>
