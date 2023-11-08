@@ -103,6 +103,7 @@ const useAuthModule = () => {
   ): Promise<ProfileResponse> => {
     if (payload.file !== undefined) {
       const res = await uploadSingle(payload.file);
+      console.log('res', res)
 
       payload = {
         ...payload,

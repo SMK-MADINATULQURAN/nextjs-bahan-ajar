@@ -8,10 +8,6 @@ import InputText from "@/components/InputText";
 import Label from "@/components/Label";
 import Button from "@/components/Button";
 import useAuthModule from "@/app/auth/lib";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 import Image from "next/image";
 
 export const registerSchema = yup.object().shape({
@@ -39,7 +35,7 @@ const UpdateProfile = () => {
     enableReinitialize: true,
     onSubmit: (values) => {
 
-        console.log('va', values)
+        
         mutate(values);
     },
   });
@@ -54,12 +50,14 @@ const UpdateProfile = () => {
   } = formik;
   console.log("data", data);
 
+  console.log('file', values.file)
   if (isFetching) {
     return <div>Loading ...</div>;
   }
   return (
     <section>
       {JSON.stringify(values)}
+      
       <div className="flex items-center justify-center w-full">
         <h1 className="text-3xl text-blue-400">Update Profile</h1>
       </div>
@@ -89,15 +87,21 @@ const UpdateProfile = () => {
           <section className="w-full">
             {/* {/* <Label htmlFor="password" title="Password" /> */}
             <label htmlFor="file" className="bg-blue-400 w-[200px] h-full p-5">
-              Upload
+              Upload {values?.file?.name || ""}
             </label>
 
             <input
+           
               type="file"
               id="file"
               className="hidden"
+              
               onChange={(event: any) => {
                 const file = event.target.files[0];
+
+                if(file.type !== 'image/jpeg') {
+                    return alert('type tidak sesauai')
+                }
 
                 let reader = new FileReader();
                 reader.onloadend = () => {
