@@ -9,6 +9,7 @@ import Label from "@/components/Label";
 import Button from "@/components/Button";
 import useAuthModule from "@/app/auth/lib";
 import Image from "next/image";
+import useUploadFile from "@/hook/useUploadFile";
 
 export const registerSchema = yup.object().shape({
   nama: yup
@@ -24,6 +25,7 @@ const UpdateProfile = () => {
   const { useUpdateProfile, useProfile } = useAuthModule();
   const { data, isFetching } = useProfile();
   const { mutate, isLoading } = useUpdateProfile();
+
   const formik = useFormik<ProfileUpdatePayload>({
     initialValues: {
       nama: data?.data?.nama || "",

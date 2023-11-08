@@ -1,7 +1,6 @@
 import useAxiosAuth from "@/hook/useAxiosAuth";
 import { BaseResponseSuccess } from "@/lib/axiosClient";
 
-
 interface FileResponse extends BaseResponseSuccess {
   data: {
     file_url: string;
@@ -25,7 +24,11 @@ const useUploadFile = () => {
       .then((res) => res.data);
   };
 
-  return { uploadSingle };
+  const deleteFile = async (file_name: string) => {
+    return axiosAuthClient.delete(`upload/file/delete/${file_name}`);
+  };
+
+  return { uploadSingle, deleteFile };
 };
 
 export default useUploadFile;

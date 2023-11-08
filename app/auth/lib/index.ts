@@ -123,6 +123,7 @@ const useAuthModule = () => {
         onSuccess: async (response) => {
           toastSuccess(response.message);
           queryClient.invalidateQueries(["/auth/profile"]);
+          
         },
         onError: (error: any) => {
           if (error.response.status == 422) {
