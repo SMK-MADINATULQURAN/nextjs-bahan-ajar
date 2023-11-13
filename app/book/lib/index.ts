@@ -5,6 +5,8 @@ import {
   BookDetailResponse,
   BookListFilter,
   BookListResponse,
+  BookUpdatePayload,
+  BookUpdateResponse,
 } from "../interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
@@ -31,12 +33,6 @@ const useBookModule = () => {
         console.log("res", res);
         return res.data;
       });
-  };
-
-  const createBook = (
-    payload: BookCreatePayload
-  ): Promise<BookCreateResponse> => {
-    return axiosClient.post(`/book/create`, payload).then((res) => res.data);
   };
 
   const useBookList = () => {
@@ -72,6 +68,12 @@ const useBookModule = () => {
     };
   };
 
+  const createBook = (
+    payload: BookCreatePayload
+  ): Promise<BookCreateResponse> => {
+    return axiosClient.post(`/book/create`, payload).then((res) => res.data);
+  };
+
   const useCreateBook = () => {
     const { isLoading, mutate } = useMutation(
       (payload: BookCreatePayload) => createBook(payload),
@@ -102,6 +104,47 @@ const useBookModule = () => {
     return { mutate, isLoading };
   };
 
+  //update
+
+  const updateBook = (
+    payload: BookUpdatePayload,
+    id : number
+  ): Promise<BookUpdateResponse> => {
+    return axiosClient.put(`/book/update/${id}`, payload).then((res) => res.data);
+  };
+
+  const useUpdateBook = (id:number) => {
+    const { isLoading, mutate } = useMutation(
+      (payload: BookCreatePayload) => updateBook(payload, id),
+      {
+        onSuccess: (response) => {
+          console.log("res", response);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: response.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        },
+        onError: (err) => {
+          console.log("err", err);
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Ada Kesalahan",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        },
+      }
+    );
+
+    return { mutate, isLoading };
+  };
+
+  //update
+
   const getDetailBook = async (id: string): Promise<BookDetailResponse> => {
     return axiosClient.get(`/book/detail/${id}`).then((res) => res.data.data);
   };
@@ -118,7 +161,7 @@ const useBookModule = () => {
     return { data, isFetching, isLoading };
   };
 
-  return { useBookList, useCreateBook, useDetailBook };
+  return { useBookList, useCreateBook, useDetailBook, useUpdateBook };
 };
 
 export default useBookModule;

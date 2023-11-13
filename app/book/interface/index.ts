@@ -29,4 +29,7 @@ export interface BookCreateResponse {
   data?: Book;
 }
 
-export interface BookDetailResponse extends Book{}
+export interface BookUpdatePayload extends BookCreatePayload {}
+export interface BookUpdateResponse extends BookCreateResponse {}
+
+export interface BookDetailResponse extends Book {}
