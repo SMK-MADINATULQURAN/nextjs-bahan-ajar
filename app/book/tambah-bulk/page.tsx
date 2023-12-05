@@ -9,17 +9,22 @@ import {
   FormikProvider,
   FieldArray,
   ArrayHelpers,
-  getIn
+  getIn,
 } from "formik";
 import * as yup from "yup";
 import { BookCreateArrayPayload } from "../interface";
 import useBookModule from "../lib";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/20/solid";
-import { createBookSchema } from "../tambah/page";
+// import { createBookSchema } from "../tambah/page";
 import { option } from "../tambah/page";
 import { AddButton, DeleteButton } from "@/components/ButtonAction";
 
+const createBookSchema = yup.object().shape({
+  title: yup.string().nullable().default("").required("Wajib isi"),
+  author: yup.string().nullable().default("").required("Wajib isi"),
+  year: yup.number().nullable().default(undefined).required("Wajib pilih"),
+});
 const defaultCatatanArray = {
   data: [
     {
@@ -37,10 +42,34 @@ const createBookArraySchema = yup
   })
   .default(defaultCatatanArray);
 
+const ujianSchema = yup.object().shape({
+  nilai: yup.number().nullable().required(),
+  mapel: yup.string().nullable().required(),
+});
+
+const createUser = yup.object().shape({
+  nama: yup
+    .string()
+    .nullable()
+    .required("Nama wajib diisi")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+      "Nama harus mengandung setidaknya satu huruf besar, satu huruf kecil, satu angka, dan satu karakter spesial"
+    ),
+  alamat: yup.string().nullable().required(),
+  ujian: yup.array().of(ujianSchema),
+  tes: yup.object().shape({
+    tes1: yup.string().nullable().required(),
+    tes2: yup.string().nullable().required(),
+  }),
+});
+
 const CreateBook = () => {
   const { useCreateBulkBook } = useBookModule();
   const { mutate, isLoading } = useCreateBulkBook();
   const onSubmit = async (values: BookCreateArrayPayload) => {
+
+    console.log('va', values)
     mutate(values, {
       onSuccess: () => {
         resetForm();
@@ -65,6 +94,7 @@ const CreateBook = () => {
     errors,
     resetForm,
     setValues,
+    touched,
   } = formik;
 
   return (
@@ -78,7 +108,7 @@ const CreateBook = () => {
           </span>
         </Link>
         <h2 className="text-xl font-bold text-gray-500">Tambah Buku</h2>
-        {JSON.stringify(errors)}
+        errro : {JSON.stringify(errors)}
         <FormikProvider value={formik}>
           <Form className="space-y-5" onSubmit={handleSubmit}>
             <FieldArray
@@ -97,7 +127,10 @@ const CreateBook = () => {
                           />
                         </section>
                         <section>
-                          <Label htmlFor="title" title="Title" />
+                          <Label
+                            htmlFor={`data[${index}]title`}
+                            title="Title"
+                          />
                           <InputText
                             value={value.title}
                             placeholder="Judul Buku"
@@ -105,10 +138,8 @@ const CreateBook = () => {
                             name={`data[${index}]title`}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            isError={
-                              getIn(errors?.data?.[index], "title")
-                            }
-                            messageError={ getIn(errors?.data?.[index], "title")}
+                            isError={getIn(errors?.data?.[index], "title")}
+                            messageError={getIn(errors?.data?.[index], "title")}
                           />
                         </section>
                         <section>
@@ -126,9 +157,13 @@ const CreateBook = () => {
                             }}
                             onBlur={handleBlur}
                             isError={
-                              getIn(errors?.data?.[index], "author")
+                              getIn(errors?.data?.[index], "author") &&
+                              getIn(touched?.data?.[index], "title")
                             }
-                            messageError={ getIn(errors?.data?.[index], "author")}
+                            messageError={
+                              getIn(errors?.data?.[index], "author") &&
+                              getIn(touched?.data?.[index], "title")
+                            }
                           />
                         </section>
                         <section>
@@ -140,10 +175,8 @@ const CreateBook = () => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             options={option}
-                            isError={
-                              getIn(errors?.data?.[index], "year")
-                            }
-                            messageError={ getIn(errors?.data?.[index], "year")}
+                            isError={getIn(errors?.data?.[index], "year")}
+                            messageError={getIn(errors?.data?.[index], "year")}
                           />
                         </section>
                       </section>
@@ -152,7 +185,7 @@ const CreateBook = () => {
                   <section>
                     <AddButton
                       onClick={() =>
-                        arrayHelpers.push(createBookSchema.getDefault())
+                        arrayHelpers.push({ title: "", author: "", year: 2023 })
                       }
                     />
                   </section>

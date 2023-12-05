@@ -67,7 +67,11 @@ const CreateBook = () => {
     <section className="flex items-center  justify-center w-full h-full">
       <section className="w-1/2">
         <Link href={"/book"}>
-           <span className="flex items-center" > <ArrowLongLeftIcon className="h-5 w-5 mr-2"/>Kembali</span>
+          <span className="flex items-center">
+            {" "}
+            <ArrowLongLeftIcon className="h-5 w-5 mr-2" />
+            Kembali
+          </span>
         </Link>
         <h2 className="text-xl font-bold text-gray-500">Tambah Buku</h2>
 
@@ -80,7 +84,9 @@ const CreateBook = () => {
                 placeholder="Judul Buku"
                 id="title"
                 name="title"
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFieldValue("title", e.target.value);
+                }}
                 onBlur={handleBlur}
                 isError={!!errors.title}
                 messageError={errors.title}
